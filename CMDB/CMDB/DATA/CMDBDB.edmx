@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CMDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="configurationItem">
+          <Key>
+            <PropertyRef Name="configurationItemId" />
+          </Key>
+          <Property Name="configurationItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar(max)" Nullable="false" />
+          <Property Name="version" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="descripcion" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="dependencies">
+          <Key>
+            <PropertyRef Name="dependencyId" />
+          </Key>
+          <Property Name="dependencyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="dependeeId" Type="int" Nullable="false" />
+          <Property Name="dependsOnId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__dependenc__depen__3C69FB99">
+          <End Role="configurationItem" Type="Self.configurationItem" Multiplicity="1" />
+          <End Role="dependencies" Type="Self.dependencies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="configurationItem">
+              <PropertyRef Name="configurationItemId" />
+            </Principal>
+            <Dependent Role="dependencies">
+              <PropertyRef Name="dependeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__dependenc__depen__3D5E1FD2">
+          <End Role="configurationItem" Type="Self.configurationItem" Multiplicity="1" />
+          <End Role="dependencies" Type="Self.dependencies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="configurationItem">
+              <PropertyRef Name="configurationItemId" />
+            </Principal>
+            <Dependent Role="dependencies">
+              <PropertyRef Name="dependsOnId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CMDBModelStoreContainer">
+          <EntitySet Name="configurationItem" EntityType="Self.configurationItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="dependencies" EntityType="Self.dependencies" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__dependenc__depen__3C69FB99" Association="Self.FK__dependenc__depen__3C69FB99">
+            <End Role="configurationItem" EntitySet="configurationItem" />
+            <End Role="dependencies" EntitySet="dependencies" />
+          </AssociationSet>
+          <AssociationSet Name="FK__dependenc__depen__3D5E1FD2" Association="Self.FK__dependenc__depen__3D5E1FD2">
+            <End Role="configurationItem" EntitySet="configurationItem" />
+            <End Role="dependencies" EntitySet="dependencies" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CMDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="configurationItem">
+          <Key>
+            <PropertyRef Name="configurationItemId" />
+          </Key>
+          <Property Name="configurationItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="version" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="dependencies" Relationship="Self.FK__dependenc__depen__3C69FB99" FromRole="configurationItem" ToRole="dependencies" />
+          <NavigationProperty Name="dependees" Relationship="Self.FK__dependenc__depen__3D5E1FD2" FromRole="configurationItem" ToRole="dependencies" />
+        </EntityType>
+        <EntityType Name="dependencies">
+          <Key>
+            <PropertyRef Name="dependencyId" />
+          </Key>
+          <Property Name="dependencyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="dependeeId" Type="Int32" Nullable="false" />
+          <Property Name="dependsOnId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="dependee" Relationship="Self.FK__dependenc__depen__3C69FB99" FromRole="dependencies" ToRole="configurationItem" />
+          <NavigationProperty Name="dependsOn" Relationship="Self.FK__dependenc__depen__3D5E1FD2" FromRole="dependencies" ToRole="configurationItem" />
+        </EntityType>
+        <Association Name="FK__dependenc__depen__3C69FB99">
+          <End Role="configurationItem" Type="Self.configurationItem" Multiplicity="1" />
+          <End Role="dependencies" Type="Self.dependencies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="configurationItem">
+              <PropertyRef Name="configurationItemId" />
+            </Principal>
+            <Dependent Role="dependencies">
+              <PropertyRef Name="dependeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__dependenc__depen__3D5E1FD2">
+          <End Role="configurationItem" Type="Self.configurationItem" Multiplicity="1" />
+          <End Role="dependencies" Type="Self.dependencies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="configurationItem">
+              <PropertyRef Name="configurationItemId" />
+            </Principal>
+            <Dependent Role="dependencies">
+              <PropertyRef Name="dependsOnId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CMDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="configurationItem" EntityType="Self.configurationItem" />
+          <EntitySet Name="dependencies" EntityType="Self.dependencies" />
+          <AssociationSet Name="FK__dependenc__depen__3C69FB99" Association="Self.FK__dependenc__depen__3C69FB99">
+            <End Role="configurationItem" EntitySet="configurationItem" />
+            <End Role="dependencies" EntitySet="dependencies" />
+          </AssociationSet>
+          <AssociationSet Name="FK__dependenc__depen__3D5E1FD2" Association="Self.FK__dependenc__depen__3D5E1FD2">
+            <End Role="configurationItem" EntitySet="configurationItem" />
+            <End Role="dependencies" EntitySet="dependencies" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CMDBModelStoreContainer" CdmEntityContainer="CMDBEntities">
+          <EntitySetMapping Name="configurationItem">
+            <EntityTypeMapping TypeName="CMDBModel.configurationItem">
+              <MappingFragment StoreEntitySet="configurationItem">
+                <ScalarProperty Name="configurationItemId" ColumnName="configurationItemId" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="dependencies">
+            <EntityTypeMapping TypeName="CMDBModel.dependencies">
+              <MappingFragment StoreEntitySet="dependencies">
+                <ScalarProperty Name="dependencyId" ColumnName="dependencyId" />
+                <ScalarProperty Name="dependeeId" ColumnName="dependeeId" />
+                <ScalarProperty Name="dependsOnId" ColumnName="dependsOnId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
