@@ -23,7 +23,7 @@ namespace CMDB
                 Console.WriteLine("Favor introducir a continuación el número de la opción deseada seguido de Enter");
                 Console.WriteLine();
                 string selectedOption = Console.ReadLine();
-                if (isValidOption(selectedOption,5))
+                if (isValidOption(selectedOption, 5))
                 {
                     performAction(selectedOption);
                 }
@@ -41,7 +41,7 @@ namespace CMDB
                     addConfigurationItem();
                     break;
                 case "2":
-                   // addDependency();
+                    addDependency();
                     break;
                 case "3":
                     modifyConfigurationItem();
@@ -66,12 +66,12 @@ namespace CMDB
             foreach (configurationItem ci in allConfigurationItems)
             {
                 Console.WriteLine(ci.toString());
-                if(ci.dependencies!= null && ci.dependencies.Any())
+                if (ci.dependencies != null && ci.dependencies.Any())
                 {
                     Console.WriteLine("Dependencias: ");
                     foreach (dependencies dependency in ci.dependencies)
                     {
-                        Console.WriteLine("        "+dependency.dependsOn.toString());
+                        Console.WriteLine("        " + dependency.dependsOn.toString());
                     }
                     Console.WriteLine();
                     Console.WriteLine();
@@ -129,7 +129,7 @@ namespace CMDB
                                 modified = true;
                                 continue;
                             }
-                            if (isValidOption(selectedOption,2))
+                            if (isValidOption(selectedOption, 2))
                             {
                                 switch (selectedOption)
                                 {
@@ -215,7 +215,7 @@ namespace CMDB
         {
             int dummy = 0;
             int.TryParse(option, out dummy);
-            if(dummy!= null && dummy >0 && dummy <= max)
+            if (dummy != null && dummy > 0 && dummy <= max)
             {
                 return true;
             }
@@ -246,7 +246,7 @@ namespace CMDB
                     }
                     else
                     {
-                        if(nombre == "q")
+                        if (nombre == "q")
                         {
                             complete = true;
                             validInput = true;
@@ -469,6 +469,99 @@ namespace CMDB
             {
                 Console.WriteLine(ci.toString());
             }
+        }
+
+        private static void listAllConfigurationItems(int exceptionId)
+        {
+            Console.Clear();
+            configurationItemDAO configurationItemDAO = new configurationItemDAO();
+            List<configurationItem> allConfigurationItems = configurationItemDAO.getConfigurationItems();
+
+            Console.WriteLine("\n\n Listado de elementos de configuración \n\n");
+            foreach (configurationItem ci in allConfigurationItems)
+            {
+                if (ci.configurationItemId != exceptionId)
+                    Console.WriteLine(ci.toString());
+            }
+        }
+
+        private static void addDependency()
+        {
+            string option = "";
+            configurationItemDAO configurationItemDAO = new configurationItemDAO();
+            int dependeeId = 0;
+            int dependsOnId = 0;
+            bool done = false;
+            bool validEntry = false;
+            bool validSecondEntry = false;
+            while (!done)
+            {
+                while (!validEntry)
+                {
+
+                    listAllConfigurationItems();
+                    Console.WriteLine("\n Seleccione el elemento de configuración al cual desea agregar dependencias: ");
+                    option = Console.ReadLine();
+
+                    if (!int.TryParse(option, out dependeeId))
+                    {
+                        Console.WriteLine("Selección invalida. Favor seleccionar un número correspondiente al ID de un elemento de configuración previamente registrado");
+                    }
+                    else
+                    {
+                        if (!configurationItemDAO.existsConfigurationItemWithID(dependeeId))
+                        {
+                            Console.WriteLine("Este ID no corresponde a un Elemento de configuración previamente registrado, favor intentar nuevamente");
+                        }
+                        else
+                        {
+                            validEntry = true;
+
+                            listAllConfigurationItems(dependeeId);
+                            while (!validSecondEntry)
+                            {
+                                option = "";
+                                Console.WriteLine("Seleccione el elemento que será del cual " + configurationItemDAO.getConfigurationItem(dependeeId).nombre + " dependerá: ");
+                                option = Console.ReadLine();
+                                if (!int.TryParse(option, out dependsOnId))
+                                {
+                                    Console.WriteLine("Selección invalida. Favor seleccionar un número correspondiente al ID de un elemento de configuración previamente registrado");
+                                }
+                                else
+                                {
+                                    if (!configurationItemDAO.existsConfigurationItemWithID(dependsOnId))
+                                    {
+                                        Console.WriteLine("Este ID no corresponde a un Elemento de configuración previamente registrado, favor intentar nuevamente");
+                                    }
+                                    else
+                                    {
+                                        if (configurationItemDAO.dependencyExists(dependeeId, dependsOnId))
+                                        {
+                                            Console.WriteLine("El elemento seleccionado ya contiene la dependencia seleccionada.");
+                                        }
+                                        else
+                                        {
+                                            validSecondEntry = true;
+                                            configurationItemDAO.addDependency(dependeeId, dependsOnId);
+                                            done = true;
+                                        }
+
+                                    }
+
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+            Console.Clear();
+            Console.WriteLine("Dependencia creada exitosamente.");
+            Console.WriteLine(configurationItemDAO.getConfigurationItem(dependeeId).nombre + " ahora depende de " + configurationItemDAO.getConfigurationItem(dependsOnId).nombre);
+            Console.WriteLine();
+            Console.WriteLine("Presione Enter para continuar.");
+            Console.Read();
+            Console.Clear();
         }
     }
 }
