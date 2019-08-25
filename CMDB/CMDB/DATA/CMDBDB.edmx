@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="CMDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="CMDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="configurationItem">
           <Key>
             <PropertyRef Name="configurationItemId" />
@@ -13,6 +13,7 @@
           <Property Name="nombre" Type="varchar(max)" Nullable="false" />
           <Property Name="version" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="descripcion" Type="varchar(max)" />
+          <Property Name="deprecated" Type="bit" />
         </EntityType>
         <EntityType Name="dependencies">
           <Key>
@@ -58,8 +59,7 @@
             <End Role="dependencies" EntitySet="dependencies" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CMDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -73,6 +73,7 @@
           <Property Name="descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="dependencies" Relationship="Self.FK__dependenc__depen__3C69FB99" FromRole="configurationItem" ToRole="dependencies" />
           <NavigationProperty Name="dependees" Relationship="Self.FK__dependenc__depen__3D5E1FD2" FromRole="configurationItem" ToRole="dependencies" />
+          <Property Name="deprecated" Type="Boolean" />
         </EntityType>
         <EntityType Name="dependencies">
           <Key>
@@ -129,6 +130,7 @@
           <EntitySetMapping Name="configurationItem">
             <EntityTypeMapping TypeName="CMDBModel.configurationItem">
               <MappingFragment StoreEntitySet="configurationItem">
+                <ScalarProperty Name="deprecated" ColumnName="deprecated" />
                 <ScalarProperty Name="configurationItemId" ColumnName="configurationItemId" />
                 <ScalarProperty Name="nombre" ColumnName="nombre" />
                 <ScalarProperty Name="version" ColumnName="version" />

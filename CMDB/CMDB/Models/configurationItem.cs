@@ -11,8 +11,7 @@ namespace CMDB.DATA{
 
         public String toString()
         {
-            return this.configurationItemId.ToString() + ". " + this.nombre + " " + this.version;
+            return this.configurationItemId.ToString() + ". " + this.nombre + " " + this.version + " Estatus: " + ((this.deprecated?? false) ? "Deprecado" : "Activo");
         }
-
     }
 }

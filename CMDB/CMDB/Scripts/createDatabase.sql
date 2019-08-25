@@ -15,3 +15,7 @@ create table dependencies(
 	dependeeId int foreign key references configurationItem(configurationItemId) not null,
 	dependsOnId int foreign key references configurationItem(configurationItemId) not null
 )
+go
+
+
+alter table configurationItem add deprecated bit null

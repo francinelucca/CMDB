@@ -80,9 +80,39 @@ namespace CMDB.DAO
             return true;
         }
 
-        internal bool existsConfigurationItemWithID(int iD)
+        public bool existsConfigurationItemWithID(int iD)
         {
             if(this.databaseConnection.configurationItem.Any(ci => ci.configurationItemId == iD))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public configurationItem getConfigurationItem(int iD)
+        {
+            return this.databaseConnection.configurationItem.FirstOrDefault(ci => ci.configurationItemId == iD);
+        }
+
+        public void deprecate(int configurationItemId)
+        {
+            this.databaseConnection.configurationItem.Where(ci => ci.configurationItemId == configurationItemId).First().deprecated = true;
+            this.databaseConnection.SaveChanges();
+        }
+
+        internal void save()
+        {
+            this.databaseConnection.SaveChanges();
+        }
+
+        internal bool isMajorVersionChange(string version, string newVersion)
+        {
+            int majorVersionNumber;
+            int majorNewVersionNumber;
+            int.TryParse(version.Split('.')[0], out majorVersionNumber);
+            int.TryParse(newVersion.Split('.')[0], out majorNewVersionNumber);
+
+            if(majorNewVersionNumber != majorVersionNumber)
             {
                 return true;
             }

@@ -25,6 +25,7 @@ namespace CMDB.DATA
         public string nombre { get; set; }
         public string version { get; set; }
         public string descripcion { get; set; }
+        public Nullable<bool> deprecated { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<dependencies> dependencies { get; set; }
